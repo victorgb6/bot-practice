@@ -1,0 +1,23 @@
+{
+  "name": "bot-practice",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/victorgb6/bot-practice.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/victorgb6/bot-practice/issues"
+  },
+  "homepage": "https://github.com/victorgb6/bot-practice#readme",
+  "dependencies": {
+    "node-telegram-bot-api": "^0.23.3",
+    "node-wit": "^4.1.0"
+  }
+}
