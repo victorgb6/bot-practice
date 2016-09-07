@@ -49,7 +49,7 @@ bot.on('message', (msg) => {
   const text = msg.text;
 
   if (text) {
-    Wit.runActions(
+    client.runActions(
       sessionId, // the user's current session
       text, // the user's message
       sessions[sessionId].context // the user's current session state
