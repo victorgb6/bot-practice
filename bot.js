@@ -6,8 +6,6 @@ try {
   Wit = require('node-wit');
   bot = require('./index');
 } catch (e) {
-  Wit = require('node-wit');
-  bot = require('./index');
   console.error(e.stack);
 }
 
