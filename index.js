@@ -1,6 +1,6 @@
 var TelegramBot = require('node-telegram-bot-api');
 
-var token = '242921503:AAELa-0-KpXAsAJnLDUowH3GCQqgZsr23BM';
+var token = process.env.TELEGRAM_TOKEN || '242921503:AAELa-0-KpXAsAJnLDUowH3GCQqgZsr23BM';
 
 var bot = new TelegramBot(token, {
   webHook: {

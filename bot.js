@@ -16,14 +16,35 @@ try {
   bot = require('index');
 }
 
-const accessToken = (() => {
-  if (process.argv.length !== 3) {
-    console.log('usage: node examples/quickstart.js <wit-access-token>');
-    process.exit(1);
-  }
-  return process.argv[2];
-})();
+const accessToken = process.env.WIT_TOKEN || 'NTH3EN3Q47PMQQHL7YECGPIPYDSU4YMY';
 
+// This will contain all user sessions.
+// Each session has an entry:
+// sessionId -> {tid: telegramUserId, context: sessionState}
+const sessions = {};
+
+const findOrCreateSession = (tid) => {
+  let sessionId;
+  // Let's see if we already have a session for the user tid
+  Object.keys(sessions).forEach(k => {
+    if (sessions[k].tid === tid) {
+      // Yep, got it!
+      sessionId = k;
+    }
+  });
+  if (!sessionId) {
+    // No session found for user tid, let's create a new one
+    sessionId = new Date().toISOString();
+    sessions[sessionId] = {tid: tid, context: {}};
+  }
+  return sessionId;
+};
+
+
+//Telegram Code
+const tMessage = (id, text) => {
+  return bot.sendMessage(id, text);
+};
 
 
 // Quickstart example
@@ -41,13 +62,29 @@ const firstEntityValue = (entities, entity) => {
 };
 
 const actions = {
-  send(request, response) {
-    const {sessionId, context, entities} = request;
-    const {text, quickreplies} = response;
-    return new Promise(function(resolve, reject) {
-      console.log('sending...', JSON.stringify(response));
-      return resolve();
-    });
+  send({sessionId}, {text}) {
+    // Our bot has something to say!
+    // Let's retrieve the Telegram user whose session belongs to
+    const recipientId = sessions[sessionId].tid;
+    if (recipientId) {
+      // Yay, we found our recipient!
+      // Let's forward our bot response to her.
+      // We return a promise to let our bot know when we're done sending
+      return tMessage(recipientId, text)
+      .then(() => null)
+      .catch((err) => {
+        console.error(
+          'Oops! An error occurred while forwarding the response to',
+          recipientId,
+          ':',
+          err.stack || err
+        );
+      });
+    } else {
+      console.error('Oops! Couldn\'t find user for session:', sessionId);
+      // Giving the wheel back to our bot
+      return Promise.resolve()
+    }
   },
   getForecast({context, entities}) {
     let climate = ['sunny','cloudy','rainy','foggy'];
