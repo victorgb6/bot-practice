@@ -17,7 +17,6 @@ try {
   console.error(e.stack);
 }
 
-try {
 const accessToken = process.env.WIT_TOKEN || 'NTH3EN3Q47PMQQHL7YECGPIPYDSU4YMY';
 
 // This will contain all user sessions.
@@ -48,6 +47,7 @@ const tMessage = (id, text) => {
   return bot.sendMessage(id, text);
 };
 
+//Telegram message listener
 bot.on('message', (msg) => {
   const sender = msg.from.id;
   const chatId = msg.chat.id;
@@ -55,7 +55,7 @@ bot.on('message', (msg) => {
   const text = msg.text;
 
   if (text) {
-    wit.runActions(
+    Wit.runActions(
       sessionId, // the user's current session
       text, // the user's message
       sessions[sessionId].context // the user's current session state
@@ -136,6 +136,3 @@ const client = new Wit({accessToken,
   actions,
   logger: new log.Logger(log.INFO)});
 interactive(client);
-} catch (e) {
-  console.error(e.stack);
-}
