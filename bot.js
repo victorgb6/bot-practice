@@ -23,7 +23,7 @@ const accessToken = process.env.WIT_TOKEN || 'NTH3EN3Q47PMQQHL7YECGPIPYDSU4YMY';
 // sessionId -> {tid: telegramUserId, context: sessionState}
 const sessions = {};
 
-const findOrCreateSession = (tid) => {
+const findOrCreateSession = (chatId, tid) => {
   let sessionId;
   // Let's see if we already have a session for the user tid
   Object.keys(sessions).forEach(k => {
@@ -34,7 +34,7 @@ const findOrCreateSession = (tid) => {
   });
   if (!sessionId) {
     // No session found for user tid, let's create a new one
-    sessionId = new Date().toISOString();
+    sessionId = chatId;
     sessions[sessionId] = {tid: tid, context: {}};
   }
   return sessionId;
@@ -46,6 +46,35 @@ const tMessage = (id, text) => {
   return bot.sendMessage(id, text);
 };
 
+bot.on('message', (msg) => {
+  const sender = msg.from.id;
+  const chatId = msg.chat.id;
+  const sessionId = findOrCreateSession(chatId, sender);
+  const text = msg.text;
+
+  if (text) {
+    wit.runActions(
+      sessionId, // the user's current session
+      text, // the user's message
+      sessions[sessionId].context // the user's current session state
+    ).then((context) => {
+      // Our bot did everything it has to do.
+      // Now it's waiting for further messages to proceed.
+      console.log('Waiting for next user messages');
+
+      /*if (context['done']) {
+        delete sessions[sessionId];
+      }*/
+
+      // Updating the user's current session state
+      sessions[sessionId].context = context;
+    })
+    .catch((err) => {
+      console.error('Oops! Got an error from Wit: ', err.stack || err);
+    })
+  }
+});
+
 
 // Quickstart example
 
@@ -53,8 +82,7 @@ const firstEntityValue = (entities, entity) => {
   const val = entities && entities[entity] &&
     Array.isArray(entities[entity]) &&
     entities[entity].length > 0 &&
-    entities[entity][0].value
-  ;
+    entities[entity][0].value;
   if (!val) {
     return null;
   }
