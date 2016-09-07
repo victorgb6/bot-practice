@@ -49,13 +49,13 @@ const tMessage = (id, text) => {
 
 //Telegram message listener
 bot.on('message', (msg) => {
+  console.log('Got this message', msg);
   const sender = msg.from.id;
   const chatId = msg.chat.id;
   const sessionId = findOrCreateSession(chatId, sender);
   const text = msg.text;
 
   if (text) {
-    console.log('Got this message', text);
     Wit.runActions(
       sessionId, // the user's current session
       text, // the user's message
