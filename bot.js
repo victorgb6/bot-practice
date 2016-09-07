@@ -5,7 +5,6 @@ let bot = null;
 try {
   Wit = require('node-wit').Wit;
   bot = require('./index');
-  console.log('Wit:', Wit);
 } catch (e) {
   console.error(e.stack);
 }
