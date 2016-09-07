@@ -5,6 +5,7 @@ let bot = null;
 try {
   Wit = require('node-wit').Wit;
   bot = require('./index');
+  console.log('Wit:', Wit);
 } catch (e) {
   console.error(e.stack);
 }
@@ -42,7 +43,6 @@ const tMessage = (id, text) => {
 //Telegram message listener
 bot.on('message', (msg) => {
   console.log('Got this message', msg);
-  console.log('Wit:', Wit);
   const sender = msg.from.id;
   const chatId = msg.chat.id;
   const sessionId = findOrCreateSession(chatId, sender);
