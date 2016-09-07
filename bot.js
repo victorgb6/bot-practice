@@ -55,6 +55,7 @@ bot.on('message', (msg) => {
   const text = msg.text;
 
   if (text) {
+    console.log('Got this message', text);
     Wit.runActions(
       sessionId, // the user's current session
       text, // the user's message
