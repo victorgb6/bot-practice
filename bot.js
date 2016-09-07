@@ -3,7 +3,7 @@
 let Wit = null;
 let bot = null;
 try {
-  Wit = require('node-wit');
+  Wit = require('node-wit').Wit;
   bot = require('./index');
 } catch (e) {
   console.error(e.stack);
