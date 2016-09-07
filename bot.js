@@ -8,12 +8,12 @@ try {
   Wit = require('node-wit').Wit;
   interactive = require('node-wit').interactive;
   log = require('node-wit').log;
-  bot = require('index');
+  bot = require('./index');
 } catch (e) {
   Wit = require('node-wit').Wit;
   interactive = require('node-wit').interactive;
   log = require('node-wit').log;
-  bot = require('index');
+  bot = require('./index');
 }
 
 const accessToken = process.env.WIT_TOKEN || 'NTH3EN3Q47PMQQHL7YECGPIPYDSU4YMY';
