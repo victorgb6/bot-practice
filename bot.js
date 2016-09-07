@@ -1,17 +1,14 @@
 'use strict';
 
 let Wit = null;
-let interactive = null;
 let log = null;
 let bot = null;
 try {
   Wit = require('node-wit').Wit;
-  interactive = require('node-wit').interactive;
   log = require('node-wit').log;
   bot = require('./index');
 } catch (e) {
   Wit = require('node-wit').Wit;
-  interactive = require('node-wit').interactive;
   log = require('node-wit').log;
   bot = require('./index');
   console.error(e.stack);
@@ -136,4 +133,3 @@ const actions = {
 const client = new Wit({accessToken,
   actions,
   logger: new log.Logger(log.INFO)});
-interactive(client);
