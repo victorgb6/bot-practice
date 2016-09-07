@@ -14,8 +14,10 @@ try {
   interactive = require('node-wit').interactive;
   log = require('node-wit').log;
   bot = require('./index');
+  console.error(e.stack);
 }
 
+try {
 const accessToken = process.env.WIT_TOKEN || 'NTH3EN3Q47PMQQHL7YECGPIPYDSU4YMY';
 
 // This will contain all user sessions.
@@ -134,3 +136,6 @@ const client = new Wit({accessToken,
   actions,
   logger: new log.Logger(log.INFO)});
 interactive(client);
+} catch (e) {
+  console.error(e.stack);
+}
