@@ -112,12 +112,23 @@ const actions = {
   getForecast({context, entities}) {
     let climate = ['sunny','cloudy','rainy','foggy'];
     return new Promise(function(resolve, reject) {
-      var location = firstEntityValue(entities, 'location')
-      if (location) {
+      var location = firstEntityValue(entities, 'location');
+      var datetime = firstEntityValue(entities, 'datetime');
+      if (location && datetime) {
         context.forecast = climate[Math.floor(Math.random() * climate.length)];
+        delete context.missingLocation;
+        delete context.missingTime;
+      } else if (!location && datetime) {
+        context.missingLocation = true;
+        delete context.forecast;
+        delete context.missingTime;
+      } else if (location && !datetime) {
+        context.missingTime = true;
+        delete context.forecast;
         delete context.missingLocation;
       } else {
         context.missingLocation = true;
+        context.missingTime = true;
         delete context.forecast;
       }
       return resolve(context);
